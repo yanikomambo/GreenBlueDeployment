@@ -1,23 +1,18 @@
 version: 0.0
 os: linux
-
 files:
-  - source: ./
-    destination: /var/www/html
-    overwrite: yes
-
+  - source: /index.html
+    destination: /var/www/html/
 hooks:
   BeforeInstall:
-    - location: scripts/stop_apache.sh
+    - location: scripts/install_dependencies
+      timeout: 300
       runas: root
-  ApplicationStart:
-    - location: scripts/changepermission.sh
-      timeout: 3600
-  AfterInstall:
-    - location: scripts/start_apache.sh
-      timeout: 180
+    - location: scripts/start_server
+      timeout: 300
       runas: root
-  ValidateService:
-    - location: scripts/status_apache.sh
-      timeout: 3600
+  ApplicationStop:
+    - location: scripts/stop_server
+      timeout: 300
       runas: root
+
